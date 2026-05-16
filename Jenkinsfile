@@ -1,5 +1,5 @@
 pipeline {
-    // This are pre build sections changes
+    // These are pre-build sections
     agent {
         node {
             label 'AGENT-1'
@@ -9,19 +9,20 @@ pipeline {
         COURSE = "Jenkins"
     }
     options {
-        timeout(time: 10, unit: 'MINUTES')
+        timeout(time: 10, unit: 'MINUTES') 
         disableConcurrentBuilds()
     }
+    
     parameters {
         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
         text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-        booleanParam(name: 'DEPLOY', defaultValue: False, description: 'Toggle this value')
+        booleanParam(name: 'DEPLOY', defaultValue: false, description: 'Toggle this value')
         choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
         password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     }
-    // this is build section
+    // This is build section
     stages {
-        stage( 'Build') {
+        stage('Build') {
             steps {
                 script{
                     sh """
@@ -37,23 +38,19 @@ pipeline {
                         echo "Password: ${params.PASSWORD}"
                     """
                 }
-                echo "Building"
             }
         }
         stage('Test') {
             steps {
                 script{
                     sh """
-                        echo "Testing"
-
+                        echo "Building"
                     """
                 }
-                echo "Testing"
             }
-
         }
         stage('Deploy') {
-            //  input {
+            // input {
             //     message "Should we continue?"
             //     ok "Yes, we should."
             //     submitter "alice,bob"
@@ -61,38 +58,31 @@ pipeline {
             //         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
             //     }
             // }
-            when {
+            when { 
                 expression { "$params.DEPLOY" == "true" }
-    
-            }    
+            }
             steps {
                 script{
                     sh """
                         echo "Building"
-
                     """
-
                 }
-                echo "Deploying"
-
             }
         }
-
     }
     post{
         always{
             echo 'I will always say Hello again!'
             cleanWs()
         }
-        success{
-            echo 'i will run if sucess'
+        success {
+            echo 'I will run if success'
         }
-        failure{
+        failure {
             echo 'I will run if failure'
         }
-        aborted{
+        aborted {
             echo 'pipeline is aborted'
         }
-
     }
 }
