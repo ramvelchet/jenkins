@@ -1,11 +1,11 @@
 pipeline {
-    // Thi are pre build sections changes
+    // This are pre build sections changes
     agent {
         node {
             label 'AGENT-1'
         }
     }
-    environment{
+    environment {
         COURSE = "Jenkins"
     }
     options {
@@ -62,13 +62,13 @@ pipeline {
             //     }
             // }
             when {
-                expression { "$params.DEPLOY" }
+                expression { "$params.DEPLOY" == "true" }
     
             }    
             steps {
                 script{
                     sh """
-                        echo "Deploying"
+                        echo "Building"
 
                     """
 
